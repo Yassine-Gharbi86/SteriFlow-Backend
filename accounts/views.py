@@ -123,3 +123,19 @@ class UserDetailView(RetrieveUpdateDestroyAPIView):
         user.is_active = False
         user.save()
         return Response({'detail': f'User {user.email} has been deactivated.'}, status=status.HTTP_200_OK)
+
+class UserHardDeleteView(APIView):
+    """
+    DELETE /api/auth/users/<id>/delete/  — permanently delete a user (admin only).
+    """
+    permission_classes = [IsAdmin]
+
+    def delete(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({'detail': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+        if user == request.user:
+            return Response({'detail': 'You cannot delete your own account.'}, status=status.HTTP_400_BAD_REQUEST)
+        user.delete()
+        return Response({'detail': 'User permanently deleted.'}, status=status.HTTP_200_OK)

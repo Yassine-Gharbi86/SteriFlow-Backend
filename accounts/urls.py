@@ -8,16 +8,16 @@ from .views import (
     ChangePasswordView,
     UserListCreateView,
     UserDetailView,
+    UserHardDeleteView,
 )
 
 urlpatterns = [
     path('login/',           LoginView.as_view(),          name='auth-login'),
     path('logout/',          LogoutView.as_view(),         name='auth-logout'),
     path('token/refresh/',   TokenRefreshView.as_view(),   name='auth-token-refresh'),
-
     path('me/',              MeView.as_view(),             name='auth-me'),
     path('change-password/', ChangePasswordView.as_view(), name='auth-change-password'),
-
     path('users/',           UserListCreateView.as_view(), name='user-list-create'),
     path('users/<uuid:pk>/', UserDetailView.as_view(),    name='user-detail'),
+    path('users/<uuid:pk>/delete/', UserHardDeleteView.as_view(), name='user-hard-delete'),
 ]
